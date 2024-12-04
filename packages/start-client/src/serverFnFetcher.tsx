@@ -5,7 +5,7 @@ import {
   isRedirect,
 } from '@tanstack/react-router'
 import { startSerializer } from './serializer'
-import type { MiddlewareOptions } from './createServerFn'
+import type { MiddlewareCtx } from '../client/createServerFn'
 
 export async function serverFnFetcher(
   url: string,
@@ -17,7 +17,7 @@ export async function serverFnFetcher(
   // If createServerFn was used to wrap the fetcher,
   // We need to handle the arguments differently
   if (isPlainObject(_first) && _first.method) {
-    const first = _first as MiddlewareOptions
+    const first = _first as MiddlewareCtx
     const type = first.data instanceof FormData ? 'formData' : 'payload'
 
     // Arrange the headers
@@ -30,7 +30,7 @@ export async function serverFnFetcher(
         : {}),
       ...(first.headers instanceof Headers
         ? Object.fromEntries(first.headers.entries())
-        : first.headers || {}),
+        : first.headers),
     })
 
     // If the method is GET, we need to move the payload to the query string
@@ -40,6 +40,7 @@ export async function serverFnFetcher(
         payload: startSerializer.stringify({
           data: first.data,
           context: first.context,
+          ...(typeof first.type !== 'function' && { type: first.type }),
         }),
       })
 
@@ -104,7 +105,7 @@ export async function serverFnFetcher(
   }
 }
 
-function getFetcherRequestOptions(opts: MiddlewareOptions) {
+function getFetcherRequestOptions(opts: MiddlewareCtx) {
   if (opts.method === 'POST') {
     if (opts.data instanceof FormData) {
       opts.data.set('__TSR_CONTEXT', startSerializer.stringify(opts.context))
