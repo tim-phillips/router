@@ -131,6 +131,12 @@
         "default": "./dist/cjs/server-functions-ssr.cjs"
       }
     },
+    "./vite": {
+      "import": {
+        "types": "./dist/esm/vite.d.ts",
+        "default": "./dist/esm/vite.js"
+      }
+    },
     "./package.json": "./package.json"
   },
   "sideEffects": false,
@@ -144,7 +150,7 @@
   "dependencies": {
     "@tanstack/start-client": "workspace:^",
     "@tanstack/start-server": "workspace:^",
-    "@tanstack/start-config": "workspace:^",
+    "@tanstack/start-plugin": "workspace:^",
     "@tanstack/start-router-manifest": "workspace:^",
     "@tanstack/start-server-functions-client": "workspace:^",
     "@tanstack/start-server-functions-server": "workspace:^",

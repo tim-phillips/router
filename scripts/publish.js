@@ -101,8 +101,8 @@ await publish({
       packageDir: 'packages/create-start',
     },
     {
-      name: '@tanstack/start-config',
-      packageDir: 'packages/start-config',
+      name: '@tanstack/start-plugin',
+      packageDir: 'packages/start-plugin',
     },
     {
       name: '@tanstack/start-api-routes',
