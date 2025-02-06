@@ -57,10 +57,35 @@ export const Route = createRootRoute({
   component: RootComponent,
 })
 
+const MyContext = React.createContext(0)
+function MyProvider({ children }: { children: React.ReactNode }) {
+  const [state, setState] = React.useState(0)
+  React.useEffect(() => {
+    console.log('MyProvider MOUNT')
+    setState((s) => s + 1)
+    return () => console.log('MyProvider UNmount')
+  }, [])
+  return (
+    <MyContext.Provider value={state}>
+      <button onClick={() => setState((s) => s + 1)}>Increment</button>
+      <div className="bg-red-500">
+        <div className="bg-green-400">{state}</div>
+        {children}
+      </div>
+    </MyContext.Provider>
+  )
+}
+function Hello() {
+  const value = React.useContext(MyContext)
+  return <div className="p-4">hello {value}</div>
+}
 function RootComponent() {
   return (
     <RootDocument>
-      <Outlet />
+      <MyProvider>
+        <Outlet />
+        <Hello />
+      </MyProvider>
     </RootDocument>
   )
 }
